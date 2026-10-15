@@ -1,6 +1,6 @@
 import { dishes } from '../../lib/data/dishes'
 import DishCard from '../../components/DishCard'
-import CategoryBar from '../../../components/CategoryBar'
+import CategoryBar from '../../components/CategoryBar'
 
 export const revalidate = 3600
 
