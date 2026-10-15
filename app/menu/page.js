@@ -1,27 +1,30 @@
 import { dishes } from '../../lib/data/dishes'
-import DishCard from '../../components/DishCard'
+import { getMenuPage } from '../../lib/menu'
 import CategoryBar from '../../components/CategoryBar'
+import SearchBox from './SearchBox'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
-export default function MenuPage({ searchParams }) {
-  const category = searchParams?.category || 'all'
-  const categories = Array.from(new Set(dishes.map((d) => d.category)))
-  const list = category === 'all' ? dishes : dishes.filter((d) => d.category === category)
+export default function MenuPage({ searchParams = {} }) {
+  const category = searchParams.category || 'all'
+  const query = searchParams.q || ''
+  const page = Number.parseInt(searchParams.page || '1', 10) || 1
+  const categories = Array.from(new Set(dishes.map((dish) => dish.category)))
+  const initialResults = getMenuPage({ query, category, page })
 
   return (
-    <div className="grid md:grid-cols-4 gap-6">
+    <div className="grid gap-6 md:grid-cols-4">
       <aside className="md:col-span-1">
-        <CategoryBar categories={categories} selected={category} />
+        <CategoryBar categories={categories} selected={category} query={query} />
       </aside>
-      <section className="md:col-span-3">
-        <h2 className="text-2xl font-bold mb-4">Menu</h2>
-        <div className="grid md:grid-cols-2 gap-4">
-          {list.map((d) => (
-            <DishCard key={d.id} dish={d} />
-          ))}
-        </div>
-      </section>
+      <div className="md:col-span-3">
+        <SearchBox
+          initialResults={initialResults}
+          query={query}
+          category={category}
+          page={initialResults.page}
+        />
+      </div>
     </div>
   )
 }

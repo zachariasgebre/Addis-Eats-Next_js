@@ -14,8 +14,7 @@ export default function CheckoutPage() {
       throw new Error('Validation failed')
     }
     const created = await createOrder(parsed.data)
-    // after successful order, redirect to a simple thanks page (or home)
-    redirect('/')
+    redirect(`/orders/${created.id}`)
   }
 
   return (

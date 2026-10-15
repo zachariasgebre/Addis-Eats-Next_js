@@ -1,14 +1,15 @@
 "use client"
 import { useRouter } from 'next/navigation'
 
-export default function CategoryBar({ categories = [], selected = 'all' }) {
+export default function CategoryBar({ categories = [], selected = 'all', query = '' }) {
   const router = useRouter()
 
   function select(cat) {
     const params = new URLSearchParams()
+    if (query) params.set('q', query)
     if (cat && cat !== 'all') params.set('category', cat)
-    const href = `/menu?${params.toString()}`
-    router.push(href)
+    const search = params.toString()
+    router.push(search ? `/menu?${search}` : '/menu')
   }
 
   return (
